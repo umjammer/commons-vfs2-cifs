@@ -22,7 +22,7 @@ public class SmbFileRandomAccessContent extends AbstractRandomAccessContent {
 
     public static final char MODE_READ = 'r';
     public static final char MODE_WRITE = 'w';
-    
+
     private static final String ERROR_OPEN_FAILED = "vfs.provider/random-access-open-failed.error";
 
 
@@ -44,7 +44,7 @@ public class SmbFileRandomAccessContent extends AbstractRandomAccessContent {
         try {
             raf = new SmbRandomAccessFile(smbFile, modes.toString());
             rafis = new SmbFileInputStream(raf);
-        } catch (final MalformedURLException | SmbException | UnknownHostException ex) {
+        } catch (final SmbException ex) {
             throw new FileSystemException(ERROR_OPEN_FAILED, smbFile, ex);
         }
     }

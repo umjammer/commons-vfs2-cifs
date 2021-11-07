@@ -1,6 +1,8 @@
 package com.github.vbauer.vfs2.provider.smb;
 
-import jcifs.smb.NtlmPasswordAuthentication;
+import jcifs.CIFSContext;
+import jcifs.context.SingletonContext;
+import jcifs.smb.NtlmPasswordAuthenticator;
 import jcifs.smb.SmbException;
 import jcifs.smb.SmbFile;
 import jcifs.smb.SmbFileInputStream;
@@ -162,31 +164,33 @@ public class SmbFileObject extends AbstractFileObject implements FileObject {
 
         UserAuthenticationData authData = null;
         SmbFile file;
-        NtlmPasswordAuthentication auth;
+        NtlmPasswordAuthenticator auth;
+        CIFSContext context;
         try {
             final FileSystemOptions fileSystemOptions = getFileSystem().getFileSystemOptions();
             authData = UserAuthenticatorUtils.authenticate(fileSystemOptions, SmbFileProvider.AUTHENTICATOR_TYPES);
             auth = createNtlmPasswordAuthentication(smbFileName, authData);
-            file = new SmbFile(path, auth);
+            context = SingletonContext.getInstance().withCredentials(auth);
+            file = new SmbFile(path, context);
         } finally {
             UserAuthenticatorUtils.cleanup(authData);
         }
 
         if (file.isDirectory() && !file.toString().endsWith("/")) {
-            file = new SmbFile(path + "/", auth);
+            file = new SmbFile(path + "/", context);
         }
 
         return file;
     }
 
-    private NtlmPasswordAuthentication createNtlmPasswordAuthentication(
+    private NtlmPasswordAuthenticator createNtlmPasswordAuthentication(
         final SmbFileName smbFileName, final UserAuthenticationData authData
     ) {
         final String domain = getAuthValue(authData, UserAuthenticationData.DOMAIN, smbFileName.getDomain());
         final String username = getAuthValue(authData, UserAuthenticationData.USERNAME, smbFileName.getUserName());
         final String password = getAuthValue(authData, UserAuthenticationData.PASSWORD, smbFileName.getPassword());
 
-        return new NtlmPasswordAuthentication(domain, username, password);
+        return new NtlmPasswordAuthenticator(domain, username, password);
     }
 
     private String getAuthValue(final UserAuthenticationData authData, final Type type, final String value) {

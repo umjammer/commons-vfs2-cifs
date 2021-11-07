@@ -44,8 +44,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
 
-        <commons.vfs.version>2.0</commons.vfs.version>
-        <jcifs.version>1.3.17</jcifs.version>
+        <commons.vfs.version>2.9.0</commons.vfs.version>
+        <jcifs.version>2.1.8</jcifs.version>
 
         <maven.compiler.plugin.version>3.2</maven.compiler.plugin.version>
         <maven.source.plugin.version>2.4</maven.source.plugin.version>
@@ -64,8 +64,8 @@
         </dependency>
 
         <dependency>
-            <groupId>jcifs</groupId>
-            <artifactId>jcifs</artifactId>
+            <groupId>eu.agno3.jcifs</groupId>
+            <artifactId>jcifs-ng</artifactId>
             <version>${jcifs.version}</version>
         </dependency>
 
