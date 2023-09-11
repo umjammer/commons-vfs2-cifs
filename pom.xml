@@ -2,179 +2,257 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.vbauer</groupId>
-    <artifactId>commons-vfs2-cifs</artifactId>
+  <groupId>com.github.vbauer</groupId>
+  <artifactId>commons-vfs2-cifs</artifactId>
     <version>1.2.0</version>
-    <packaging>jar</packaging>
 
-    <description>SMB/CIFS provider for Commons VFS</description>
-    <url>https://github.com/vbauer/commons-vfs2-cifs</url>
-    <inceptionYear>2012</inceptionYear>
+  <packaging>jar</packaging>
+  <description>SMB/CIFS provider for Commons VFS</description>
+  <url>https://github.com/umjammer/commons-vfs2-cifs</url>
+  <inceptionYear>2012</inceptionYear>
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+      <distribution>manual</distribution>
+    </license>
+  </licenses>
+  <issueManagement>
+    <system>GitHub Issues</system>
+    <url>https://github.com/umjammer/commons-vfs2-cifs/issues</url>
+  </issueManagement>
+  <developers>
+    <developer>
+      <id>vbauer</id>
+      <name>Vladislav Bauer</name>
+      <email>bauer.vlad@gmail.com</email>
+      <url>http://linkedin.com/in/vladislavbauer</url>
+    </developer>
+  </developers>
 
-    <licenses>
-        <license>
-            <name>Apache License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
-            <distribution>manual</distribution>
-        </license>
-    </licenses>
-
-    <issueManagement>
-        <system>GitHub Issues</system>
-        <url>https://github.com/vbauer/commons-vfs2-cifs/issues</url>
-    </issueManagement>
-
-    <ciManagement>
-        <system>Travis</system>
-        <url>https://travis-ci.org/vbauer/commons-vfs2-cifs</url>
-    </ciManagement>
-
-    <developers>
-        <developer>
-            <id>vbauer</id>
-            <name>Vladislav Bauer</name>
-            <email>bauer.vlad@gmail.com</email>
-            <url>http://linkedin.com/in/vladislavbauer</url>
-        </developer>
-    </developers>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>1.8</java.version>
-
-        <commons.vfs.version>2.9.0</commons.vfs.version>
-        <jcifs.version>2.1.8</jcifs.version>
-
-        <maven.compiler.plugin.version>3.2</maven.compiler.plugin.version>
-        <maven.source.plugin.version>2.4</maven.source.plugin.version>
-        <maven.checkstyle.plugin.version>2.14</maven.checkstyle.plugin.version>
-        <maven.pmd.plugin.version>3.4</maven.pmd.plugin.version>
-        <maven.animal.sniffer.plugin.version>1.14</maven.animal.sniffer.plugin.version>
-    </properties>
-
-
-    <dependencies>
-
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-vfs2</artifactId>
-            <version>${commons.vfs.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>eu.agno3.jcifs</groupId>
-            <artifactId>jcifs-ng</artifactId>
-            <version>${jcifs.version}</version>
-        </dependency>
-
-    </dependencies>
-
-    <build>
+  <profiles>
+    <profile>
+      <id>props</id>
+      <activation>
+        <file>
+          <exists>${basedir}/local.properties</exists>
+        </file>
+      </activation>
+      <build>
         <plugins>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven.compiler.plugin.version}</version>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>properties-maven-plugin</artifactId>
+            <version>1.1.0</version>
+            <executions>
+              <execution>
+                <id>read-properties</id>
+                <phase>initialize</phase>
+                <goals>
+                  <goal>read-project-properties</goal>
+                </goals>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                    <optimize>true</optimize>
+                  <files>
+                    <file>${basedir}/local.properties</file>
+                  </files>
                 </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>${maven.source.plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
+              </execution>
+            </executions>
+          </plugin>
         </plugins>
-    </build>
+      </build>
+    </profile>
 
-    <profiles>
+    <profile>
+      <id>strict</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-checkstyle-plugin</artifactId>
+            <version>3.3.0</version>
+            <configuration>
+              <consoleOutput>true</consoleOutput>
+              <configLocation>src/test/resources/checkstyle.xml</configLocation>
+            </configuration>
+            <executions>
+              <execution>
+                <phase>verify</phase>
+                <goals>
+                  <goal>check</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
 
-        <profile>
-            <id>strict</id>
-            <build>
-                <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-pmd-plugin</artifactId>
+            <version>3.21.0</version>
+            <configuration>
+              <failOnViolation>true</failOnViolation>
+              <printFailingErrors>true</printFailingErrors>
+              <includeTests>true</includeTests>
+              <linkXRef>false</linkXRef>
+            </configuration>
+            <executions>
+              <execution>
+                <phase>package</phase>
+                <goals>
+                  <goal>check</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
 
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-checkstyle-plugin</artifactId>
-                        <version>${maven.checkstyle.plugin.version}</version>
-                        <configuration>
-                            <consoleOutput>true</consoleOutput>
-                            <configLocation>src/test/resources/checkstyle.xml</configLocation>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>check</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>animal-sniffer-maven-plugin</artifactId>
+            <version>1.23</version>
+            <configuration>
+              <signature>
+                <groupId>org.codehaus.mojo.signature</groupId>
+                <artifactId>java17</artifactId>
+                <version>1.0</version>
+              </signature>
+            </configuration>
+            <executions>
+              <execution>
+                <id>check-java17</id>
+                <phase>test</phase>
+                <goals>
+                  <goal>check</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-pmd-plugin</artifactId>
-                        <version>${maven.pmd.plugin.version}</version>
-                        <configuration>
-                            <failOnViolation>true</failOnViolation>
-                            <printFailingErrors>true</printFailingErrors>
-                            <includeTests>true</includeTests>
-                            <linkXRef>false</linkXRef>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>check</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.11.0</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+          <encoding>UTF-8</encoding>
+          <optimize>true</optimize>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.2.1</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.0.0</version>
+        <configuration>
+          <environmentVariables>
+            <TEST_SMB_ACCOUNT>${TEST_SMB_ACCOUNT}</TEST_SMB_ACCOUNT>
+            <TEST_SMB_DOMAIN>${TEST_SMB_DOMAIN}</TEST_SMB_DOMAIN>
+            <TEST_SMB_HOST>${TEST_SMB_HOST}</TEST_SMB_HOST>
+            <TEST_SMB_PASSWORD>${TEST_SMB_PASSWORD}</TEST_SMB_PASSWORD>
+            <TEST_SMB_PATH>${TEST_SMB_PATH}</TEST_SMB_PATH>
+          </environmentVariables>
+          <argLine>
+            -Djava.util.logging.config.file=${project.build.testOutputDirectory}/logging.properties
+            -Dvavi.util.logging.VaviFormatter.extraClassMethod="(org\.slf4j\.impl\.JDK14LoggerAdapter#(log|info)|sun\\.util\\.logging\\.LoggingSupport#log|sun\\.util\\.logging\\.PlatformLogger#fine|jdk\\.internal\\.event\\.EventHelper#logX509CertificateEvent|sun\\.util\\.logging\\.PlatformLogger.JavaLoggerProxy#doLog)"
+          </argLine>
+          <trimStackTrace>false</trimStackTrace>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>animal-sniffer-maven-plugin</artifactId>
-                        <version>${maven.animal.sniffer.plugin.version}</version>
-                        <configuration>
-                            <signature>
-                                <groupId>org.codehaus.mojo.signature</groupId>
-                                <artifactId>java17</artifactId>
-                                <version>1.0</version>
-                            </signature>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>check-java17</id>
-                                <phase>test</phase>
-                                <goals>
-                                    <goal>check</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
+  <repositories>
+    <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+    </repository>
+  </repositories>
 
-                </plugins>
-            </build>
-        </profile>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.junit</groupId>
+        <artifactId>junit-bom</artifactId>
+        <version>5.9.3</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
-    </profiles>
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-vfs2</artifactId>
+      <version>2.9.0</version>
+      <exclusions>
+        <exclusion>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-databind</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+<dependency>
+  <groupId>com.fasterxml.jackson.core</groupId>
+  <artifactId>jackson-databind</artifactId>
+  <version>2.14.2</version>
+</dependency>
 
+    <dependency>
+      <groupId>eu.agno3.jcifs</groupId>
+      <artifactId>jcifs-ng</artifactId>
+      <version>2.1.9</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-commons</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-jdk14</artifactId>
+      <version>1.7.36</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.umjammer</groupId>
+      <artifactId>vavi-commons</artifactId>
+      <version>1.1.9</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 </project>
