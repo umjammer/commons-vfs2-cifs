@@ -15,18 +15,16 @@ public class SmbFileName extends GenericFileName {
 
     public static final int DEFAULT_PORT = 139;
 
-
     private final String share;
     private final String domain;
     private String uriWithoutAuth;
 
-
     protected SmbFileName(
-        final String scheme,
-        final String hostName, final int port,
-        final String userName, final String password,
-        final String domain, final String share, final String path,
-        final FileType type
+        String scheme,
+        String hostName, int port,
+        String userName, String password,
+        String domain, String share, String path,
+        FileType type
     ) {
         super(scheme, hostName, port, DEFAULT_PORT, userName, password, path, type);
         this.share = share;
@@ -45,7 +43,7 @@ public class SmbFileName extends GenericFileName {
      * Builds the root URI for this file name.
      */
     @Override
-    protected void appendRootUri(final StringBuilder buffer, final boolean addPassword) {
+    protected void appendRootUri(StringBuilder buffer, boolean addPassword) {
         super.appendRootUri(buffer, addPassword);
         buffer.append('/');
         buffer.append(share);
@@ -55,11 +53,11 @@ public class SmbFileName extends GenericFileName {
      * put domain before username if both are set
      */
     @Override
-    protected void appendCredentials(final StringBuilder buffer, final boolean addPassword) {
-        final String domain = getDomain();
-        final String userName = getUserName();
+    protected void appendCredentials(StringBuilder buffer, boolean addPassword) {
+        String domain = getDomain();
+        String userName = getUserName();
 
-        if (domain != null && domain.length() != 0 && userName != null && userName.length() != 0) {
+        if (domain != null && !domain.isEmpty() && userName != null && !userName.isEmpty()) {
             buffer.append(domain);
             buffer.append("\\");
         }
@@ -70,7 +68,7 @@ public class SmbFileName extends GenericFileName {
      * Factory method for creating name instances.
      */
     @Override
-    public FileName createName(final String path, final FileType type) {
+    public FileName createName(String path, FileType type) {
         return new SmbFileName(
             getScheme(),
             getHostName(),
@@ -94,7 +92,7 @@ public class SmbFileName extends GenericFileName {
             return uriWithoutAuth;
         }
 
-        final StringBuilder sb = new StringBuilder(120);
+        StringBuilder sb = new StringBuilder(120);
         sb.append(getScheme());
         sb.append("://");
         sb.append(getHostName());
@@ -116,5 +114,4 @@ public class SmbFileName extends GenericFileName {
     public String getDomain() {
         return domain;
     }
-
 }

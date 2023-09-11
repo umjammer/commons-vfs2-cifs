@@ -8,65 +8,43 @@ import java.io.InputStream;
 /**
  * @author Vladislav Bauer
  */
-
 public class SmbFileInputStream extends InputStream {
 
     private final SmbRandomAccessFile raf;
 
-
-    public SmbFileInputStream(final SmbRandomAccessFile raf) {
+    public SmbFileInputStream(SmbRandomAccessFile raf) {
         this.raf = raf;
     }
 
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int read() throws IOException {
-        return raf.readByte();
+        return raf.readByte() & 0xFF;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public long skip(final long n) throws IOException {
+    public long skip(long n) throws IOException {
         raf.seek(raf.getFilePointer() + n);
         return n;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void close() throws IOException {
         raf.close();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public int read(final byte[] b) throws IOException {
+    public int read(byte[] b) throws IOException {
         return raf.read(b);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public int read(final byte[] b, final int off, final int len) throws IOException {
+    public int read(byte[] b, int off, int len) throws IOException {
         return raf.read(b, off, len);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int available() throws IOException {
-        final long available = raf.length() - raf.getFilePointer();
+        long available = raf.length() - raf.getFilePointer();
         return (int) Math.min(available, Integer.MAX_VALUE);
     }
-
 }

@@ -17,7 +17,6 @@ import java.util.Collections;
  *
  * @author Vladislav Bauer
  */
-
 public class SmbFileProvider extends AbstractOriginatingFileProvider {
 
     /*package*/ static final UserAuthenticationData.Type[] AUTHENTICATOR_TYPES = new UserAuthenticationData.Type[] {
@@ -41,7 +40,6 @@ public class SmbFileProvider extends AbstractOriginatingFileProvider {
         Capability.RANDOM_ACCESS_WRITE
     ));
 
-
     public SmbFileProvider() {
         setFileNameParser(SmbFileNameParser.getInstance());
     }
@@ -51,17 +49,13 @@ public class SmbFileProvider extends AbstractOriginatingFileProvider {
      */
     @Override
     protected FileSystem doCreateFileSystem(
-        final FileName name, final FileSystemOptions fileSystemOptions
+        FileName name, FileSystemOptions fileSystemOptions
     ) throws FileSystemException {
         return new SmbFileSystem(name, fileSystemOptions);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Collection<Capability> getCapabilities() {
         return CAPABILITIES;
     }
-
 }

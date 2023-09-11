@@ -15,18 +15,14 @@ import java.util.Collection;
  *
  * @author Vladislav Bauer
  */
-
 public class SmbFileSystem extends AbstractFileSystem implements FileSystem {
 
-    protected SmbFileSystem(final FileName rootName, final FileSystemOptions fileSystemOptions) {
+    protected SmbFileSystem(FileName rootName, FileSystemOptions fileSystemOptions) {
         super(rootName, null, fileSystemOptions);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    protected FileObject createFile(final AbstractFileName name) throws Exception {
+    protected FileObject createFile(AbstractFileName name) throws Exception {
         return new SmbFileObject(name, this);
     }
 
@@ -34,8 +30,7 @@ public class SmbFileSystem extends AbstractFileSystem implements FileSystem {
      * Returns the capabilities of this file system.
      */
     @Override
-    protected void addCapabilities(final Collection<Capability> capabilities) {
+    protected void addCapabilities(Collection<Capability> capabilities) {
         capabilities.addAll(SmbFileProvider.CAPABILITIES);
     }
-
 }

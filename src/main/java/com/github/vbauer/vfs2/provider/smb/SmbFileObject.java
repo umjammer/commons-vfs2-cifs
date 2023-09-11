@@ -25,13 +25,11 @@ import static org.apache.commons.vfs2.UserAuthenticationData.Type;
  *
  * @author Vladislav Bauer
  */
-
-public class SmbFileObject extends AbstractFileObject implements FileObject {
+public class SmbFileObject extends AbstractFileObject<SmbFileSystem> implements FileObject {
 
     private SmbFile file;
 
-
-    protected SmbFileObject(final AbstractFileName name, final SmbFileSystem fileSystem) {
+    protected SmbFileObject(AbstractFileName name, SmbFileSystem fileSystem) {
         super(name, fileSystem);
     }
 
@@ -46,9 +44,6 @@ public class SmbFileObject extends AbstractFileObject implements FileObject {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected void doDetach() throws Exception {
         // File closed through content-streams
@@ -97,11 +92,8 @@ public class SmbFileObject extends AbstractFileObject implements FileObject {
         file.delete();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    protected void doRename(final FileObject newFile) throws Exception {
+    protected void doRename(FileObject newFile) throws Exception {
         file.renameTo(createSmbFile(newFile.getName()));
     }
 
@@ -133,7 +125,6 @@ public class SmbFileObject extends AbstractFileObject implements FileObject {
     /**
      * Creates an input stream to read the file content from.
      */
-
     @Override
     protected InputStream doGetInputStream() throws Exception {
         return new SmbFileInputStream(file);
@@ -143,7 +134,7 @@ public class SmbFileObject extends AbstractFileObject implements FileObject {
      * Creates an output stream to write the file content to.
      */
     @Override
-    protected OutputStream doGetOutputStream(final boolean bAppend) throws Exception {
+    protected OutputStream doGetOutputStream(boolean bAppend) throws Exception {
         return new SmbFileOutputStream(file, bAppend);
     }
 
@@ -151,23 +142,22 @@ public class SmbFileObject extends AbstractFileObject implements FileObject {
      * Random access.
      */
     @Override
-    protected RandomAccessContent doGetRandomAccessContent(final RandomAccessMode mode) throws Exception {
+    protected RandomAccessContent doGetRandomAccessContent(RandomAccessMode mode) throws Exception {
         return new SmbFileRandomAccessContent(file, mode);
     }
 
-
     private SmbFile createSmbFile(
-        final FileName fileName
+        FileName fileName
     ) throws MalformedURLException, SmbException, FileSystemException {
-        final SmbFileName smbFileName = (SmbFileName) fileName;
-        final String path = smbFileName.getUriWithoutAuth();
+        SmbFileName smbFileName = (SmbFileName) fileName;
+        String path = smbFileName.getUriWithoutAuth();
 
         UserAuthenticationData authData = null;
         SmbFile file;
         NtlmPasswordAuthenticator auth;
         CIFSContext context;
         try {
-            final FileSystemOptions fileSystemOptions = getFileSystem().getFileSystemOptions();
+            FileSystemOptions fileSystemOptions = getFileSystem().getFileSystemOptions();
             authData = UserAuthenticatorUtils.authenticate(fileSystemOptions, SmbFileProvider.AUTHENTICATOR_TYPES);
             auth = createNtlmPasswordAuthentication(smbFileName, authData);
             context = SingletonContext.getInstance().withCredentials(auth);
@@ -184,19 +174,18 @@ public class SmbFileObject extends AbstractFileObject implements FileObject {
     }
 
     private NtlmPasswordAuthenticator createNtlmPasswordAuthentication(
-        final SmbFileName smbFileName, final UserAuthenticationData authData
+        SmbFileName smbFileName, UserAuthenticationData authData
     ) {
-        final String domain = getAuthValue(authData, UserAuthenticationData.DOMAIN, smbFileName.getDomain());
-        final String username = getAuthValue(authData, UserAuthenticationData.USERNAME, smbFileName.getUserName());
-        final String password = getAuthValue(authData, UserAuthenticationData.PASSWORD, smbFileName.getPassword());
+        String domain = getAuthValue(authData, UserAuthenticationData.DOMAIN, smbFileName.getDomain());
+        String username = getAuthValue(authData, UserAuthenticationData.USERNAME, smbFileName.getUserName());
+        String password = getAuthValue(authData, UserAuthenticationData.PASSWORD, smbFileName.getPassword());
 
         return new NtlmPasswordAuthenticator(domain, username, password);
     }
 
-    private String getAuthValue(final UserAuthenticationData authData, final Type type, final String value) {
+    private String getAuthValue(UserAuthenticationData authData, Type type, String value) {
         return UserAuthenticatorUtils.toString(
             UserAuthenticatorUtils.getData(authData, type, UserAuthenticatorUtils.toChar(value))
         );
     }
-
 }
