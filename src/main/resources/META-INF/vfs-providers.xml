@@ -1,7 +1,7 @@
 <providers>
 
 	<provider class-name="com.github.vbauer.vfs2.provider.smb.SmbFileProvider">
-		<scheme name="smb" />
+		<scheme name="cifs" />
 		<if-available class-name="jcifs.smb.SmbFile" />
 	</provider>
 
