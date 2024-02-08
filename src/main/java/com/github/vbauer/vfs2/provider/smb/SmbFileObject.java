@@ -173,8 +173,8 @@ public class SmbFileObject extends AbstractFileObject<SmbFileSystem> implements 
         return file;
     }
 
-    private NtlmPasswordAuthenticator createNtlmPasswordAuthentication(
-        SmbFileName smbFileName, UserAuthenticationData authData
+    private static NtlmPasswordAuthenticator createNtlmPasswordAuthentication(
+            SmbFileName smbFileName, UserAuthenticationData authData
     ) {
         String domain = getAuthValue(authData, UserAuthenticationData.DOMAIN, smbFileName.getDomain());
         String username = getAuthValue(authData, UserAuthenticationData.USERNAME, smbFileName.getUserName());
@@ -183,7 +183,7 @@ public class SmbFileObject extends AbstractFileObject<SmbFileSystem> implements 
         return new NtlmPasswordAuthenticator(domain, username, password);
     }
 
-    private String getAuthValue(UserAuthenticationData authData, Type type, String value) {
+    private static String getAuthValue(UserAuthenticationData authData, Type type, String value) {
         return UserAuthenticatorUtils.toString(
             UserAuthenticatorUtils.getData(authData, type, UserAuthenticatorUtils.toChar(value))
         );

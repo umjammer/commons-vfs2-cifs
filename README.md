@@ -1,7 +1,7 @@
 [![Release](https://jitpack.io/v/umjammer/commons-vfs2-cifs.svg)](https://jitpack.io/#umjammer/commons-vfs2-cifs)
 [![Java CI](https://github.com/umjammer/commons-vfs2-cifs/actions/workflows/maven.yml/badge.svg)](https://github.com/umjammer/commons-vfs2-cifs/actions/workflows/maven.yml)
 [![CodeQL](https://github.com/umjammer/commons-vfs2-cifs/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/umjammer/commons-vfs2-cifs/actions/workflows/codeql-analysis.yml)
-![Java](https://img.shields.io/badge/Java-8-b07219)
+![Java](https://img.shields.io/badge/Java-17-b07219)
 [![Parent](https://img.shields.io/badge/Parent-vavi--apps--fuse-pink)](https://github.com/umjammer/vavi-apps-fuse)
 
 # commons-vfs2-cifs
@@ -16,7 +16,7 @@ Project "commons-vfs2-cifs" is a SMB/CIFS provider for Commons VFS.
 
 Project "commons-vfs2-cifs" requires:
 * [jcifs-ng library](https://github.com/AgNO3/jcifs-ng)
-* Java 8
+* Java 17
 
 ## Install
 
