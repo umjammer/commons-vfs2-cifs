@@ -5,9 +5,9 @@ import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileType;
 import org.apache.commons.vfs2.provider.FileNameParser;
 import org.apache.commons.vfs2.provider.GenericURLFileNameParser;
-import org.apache.commons.vfs2.provider.URLFileNameParser;
 import org.apache.commons.vfs2.provider.UriParser;
 import org.apache.commons.vfs2.provider.VfsComponentContext;
+
 
 /**
  * Implementation for sftp. set default port to 139.
@@ -33,7 +33,7 @@ public class SmbFileNameParser extends GenericURLFileNameParser {
         StringBuilder name = new StringBuilder();
 
         // Extract the scheme and authority parts
-        Authority auth = extractToPath(filename, name);
+        Authority auth = extractToPath(context, filename, name);
 
         // extract domain
         String username = auth.getUserName();

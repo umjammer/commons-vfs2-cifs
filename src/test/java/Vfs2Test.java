@@ -9,7 +9,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
 
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemManager;
@@ -28,6 +27,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Vfs2Test.
+ *
+ * ignore "java.net.BindException: Can't assign requested address"
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 0.00 2023-09-11 nsano initial version <br>
@@ -89,7 +90,7 @@ Debug.println(Level.FINE, "baseUrl: " + baseUrl);
         // $ ls $remote
 System.out.println("$ ls " + path);
         FileObject dir = manager.resolveFile(baseUrl + path, options);
-        for (FileObject f : Arrays.stream(dir.getChildren()).collect(Collectors.toList())) {
+        for (FileObject f : Arrays.stream(dir.getChildren()).toList()) {
             System.out.println(f.getURI().getPath());
         }
 
@@ -107,7 +108,7 @@ System.out.println("$ cp src/test/java/Vfs2Test.java " + target);
         // $ ls $remote
 System.out.println("$ ls " + path);
         dir = manager.resolveFile(baseUrl + path, options);
-        for (FileObject f : Arrays.stream(dir.getChildren()).collect(Collectors.toList())) {
+        for (FileObject f : Arrays.stream(dir.getChildren()).toList()) {
             System.out.println(f.getURI().getPath());
         }
 
@@ -120,7 +121,7 @@ System.out.println("$ cp " + target + " " + renamed);
         // $ ls $remote
 System.out.println("$ ls " + path);
         dir = manager.resolveFile(baseUrl + path, options);
-        for (FileObject f : Arrays.stream(dir.getChildren()).collect(Collectors.toList())) {
+        for (FileObject f : Arrays.stream(dir.getChildren()).toList()) {
             System.out.println(f.getURI().getPath());
         }
 
