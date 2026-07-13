@@ -35,22 +35,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class Vfs2Test {
 
-    static {
-        // TODO move to pom.xml
-        System.setProperty("vavi.util.logging.VaviFormatter.extraClassMethod",
-                "(" +
-                        "org\\.slf4j\\.impl\\.JDK14LoggerAdapter#(log|info)" +
-                        "|" +
-                        "sun\\.util\\.logging\\.LoggingSupport#log" +
-                        "|" +
-                        "sun\\.util\\.logging\\.PlatformLogger#fine" +
-                        "|" +
-                        "jdk\\.internal\\.event\\.EventHelper#logX509CertificateEvent" +
-                        "|" +
-                        "sun\\.util\\.logging\\.PlatformLogger.JavaLoggerProxy#doLog" +
-                        ")");
-    }
-
     /**
      * jcifs-ng
      */
