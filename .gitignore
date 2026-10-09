@@ -18,3 +18,4 @@ target/
 # Windows files and directories
 Thumbs.db
 local.properties
+/SESSION.md
